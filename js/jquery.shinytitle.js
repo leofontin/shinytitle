@@ -12,8 +12,28 @@
 	$.fn.shinytitle = function(options){
 	
 	
+	
+		// init vars
+		var $obj,
+			$item,
+			$text,
+			$top,
+			$left,
+			$position,
+			$timer;
+			
+	
 		// option init
-		var $settings = {};
+		var $settings = {
+			delay 	: false,
+			time 	: 500,
+			classes : ''
+		};
+		
+		
+		
+		// concatenation of options
+		$settings = $.extend($settings,options);
 		
 		
 		
@@ -60,7 +80,15 @@
 				close();
 				
 				// xreated windows
-				create();	
+				if($settings['delay'] == true){
+				
+					$timer = setTimeout(function(){
+						create();
+					}, $settings['time']);
+					
+				}else{
+					create();
+				}	
 				
 			});
 			
@@ -86,41 +114,41 @@
 			
 			
 			// create windows html
-			$('body').append('<span class="shinytitle"><span>'+ $text +'</span><span class="shinytitle_arrow"></span></span>');
+			$('body').append('<span class="shinytitle '+$settings['classes']+'"><span>'+ $text +'</span><span class="shinytitle_arrow"></span></span>');
 			
 			// sizes of windows with text of current title
-			$width_title 	= $('.shinytitle').outerWidth();
-			$height_title 	= $('.shinytitle').outerHeight();
+			var width_title 	= $('.shinytitle').outerWidth();
+			var height_title 	= $('.shinytitle').outerHeight();
 			
 			// sizes of item
-			$width_item = $item.outerWidth();
-			$height_item = $item.outerHeight();
+			var width_item = $item.outerWidth();
+			var height_item = $item.outerHeight();
 			
 			// get position of item
 			getPosition();
 			
 			// get positions on windows of top
 			if($position.top < 50){
-				$top = $position.top + $height_item + 10 - scrollY(); // if top of item is lower 50px of top
+				$top = $position.top + height_item + 10 - scrollY(); // if top of item is lower 50px of top
 				$('.shinytitle').addClass('shinytitle_bottom');
 			}else{
-				$top = $position.top - $height_title - 10 - scrollY();
+				$top = $position.top - height_title - 10 - scrollY();
 			}
 			
 			
 			// get positions on windows of left
 			
-			$left = $position.left - ($width_title - $width_item) / 2;
-			$arrow = $width_title / 2 - 5;
+			$left = $position.left - (width_title - width_item) / 2;
+			$arrow = width_title / 2 - 5;
 			
 			if($left < 10){
 				$left = 10; // if top of item is lower 50px of left
-				$arrow = ($position.left + $width_item / 2) - $left - 5;
+				$arrow = ($position.left + width_item / 2) - $left - 5;
 			}
 			
-			else if($left + $width_title > windowW()){
-				$left =  windowW() - $width_title - 10 ; // if windows out of browser on the right of browser
-				$arrow = ($position.left + $width_item / 2) - $left - 5;
+			else if($left + width_title > windowW()){
+				$left =  windowW() - width_title - 10 ; // if windows out of browser on the right of browser
+				$arrow = ($position.left + width_item / 2) - $left - 5;
 			}
 			
 			
@@ -150,7 +178,8 @@
 		**/
 		function close(){
 			
-			$('.shinytitle').remove();
+			$('.shinytitle').remove(); // delete window
+			clearTimeout($timer); // delete timer
 			
 		}
 		
