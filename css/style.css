@@ -74,6 +74,7 @@ p { margin-bottom: 1.5em; }
 h1,h3 {
 	font-family: Lobster, arial, sans-serif; 
 	margin-bottom: 1em;
+	display: inline-block;
 }
 
 h1 { font-size: 3em; }
